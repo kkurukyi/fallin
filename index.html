@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portunus — Structured Memory for AI Agents</title>
+<link rel="icon" type="image/png" href="portunus.png">
+<link rel="apple-touch-icon" href="portunus.png">
+<meta property="og:image" content="portunus.png">
+<meta property="og:title" content="Portunus — Structured Memory for AI Agents">
+<meta property="og:type" content="website">
+<style>
+@font-face{font-family:'Syncopate';src:url('Syncopate-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#2B5BFF;--bg-deep:#2450E8;
+  --white:#fff;--white-50:rgba(255,255,255,.5);--white-25:rgba(255,255,255,.25);--white-18:rgba(255,255,255,.18);--white-10:rgba(255,255,255,.1);
+  --syn:'Syncopate',sans-serif;
+  --body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:'SF Mono','Cascadia Code','Consolas',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:var(--syn);-webkit-font-smoothing:antialiased}
+::selection{background:rgba(255,255,255,.2)}
+a{color:var(--white);text-decoration:none}
+
+/* ── LOADER ── */
+.loader{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s,visibility .5s}
+.loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.loader-text{font-family:var(--syn);font-size:1rem;letter-spacing:-.05em}
+.loader-bar{width:180px;height:2px;background:var(--white-18);margin-top:.8rem;border-radius:2px;overflow:hidden}
+.loader-fill{height:100%;width:0%;background:var(--white);border-radius:2px;transition:width .3s}
+
+/* ── BRANDING PAGE (first viewport) ── */
+.page{width:100%;min-height:100vh;display:flex;flex-direction:column;padding:2.2rem 3.2rem 1.8rem;max-width:1480px;margin:0 auto;position:relative;overflow:hidden}
+
+/* HEADER */
+.hdr{display:flex;align-items:center;gap:1.2rem;flex-shrink:0;position:relative;z-index:3}
+.hdr-logo{display:flex;align-items:center;gap:.55rem;white-space:nowrap}
+.hdr-logo span.crab{font-size:1.2rem}
+.hdr-icon{width:40px;height:40px;object-fit:contain}
+.hdr-logo span.name{font-size:.73rem;font-weight:700;letter-spacing:-.05em;text-transform:uppercase}
+.hdr-line{flex:1;height:1px;background:var(--white-25)}
+.hdr-project{font-size:.68rem;font-weight:700;letter-spacing:-.05em;text-transform:uppercase;color:var(--white-50);white-space:nowrap;font-style:italic}
+
+/* MAIN GRID */
+.main{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:2rem;min-height:0;margin-top:.8rem;position:relative}
+
+/* LEFT COLUMN */
+.left{display:flex;flex-direction:column;justify-content:space-around;padding:1.5rem 0;position:relative;z-index:2}
+.row{display:flex;align-items:center;gap:2.2rem}
+.cnt{flex:1;display:flex;justify-content:center;align-items:center}
+
+/* Terminal visual (row 1) */
+.terminal{background:rgba(0,0,0,.12);border:1px solid var(--white-18);border-radius:10px;padding:1.2rem 1.4rem;font-family:var(--mono);font-size:.62rem;line-height:1.6;color:rgba(255,255,255,.65);width:100%;max-width:280px;height:auto;max-height:200px;position:relative;overflow:hidden}
+.terminal::before{content:'';position:absolute;top:-50%;right:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,.03),transparent 60%);animation:glow 4s ease-in-out infinite}
+@keyframes glow{0%,100%{opacity:.5}50%{opacity:1}}
+.terminal pre{position:relative;z-index:1;white-space:pre;margin:0;height:10em;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+.terminal pre::-webkit-scrollbar{display:none}
+.terminal .hi{color:#fff}
+.cursor{color:#fff;animation:blink .7s step-end infinite;position:relative;z-index:1}
+@keyframes blink{50%{opacity:0}}
+
+/* Brand name (row 2) */
+.brand-wrap{text-align:center}
+.brand{font-size:clamp(2.8rem,5vw,5rem);font-weight:700;letter-spacing:-.1em;line-height:1}
+.brand-bar{width:100px;height:2px;background:var(--white);margin:1.2rem auto 0;opacity:.4}
+
+/* Tagline (row 3) */
+.tagline-block{display:flex;align-items:center;gap:1rem}
+.tagline-block .crab-sm{font-size:1.8rem}
+.tagline-text{font-size:clamp(.75rem,1.1vw,1rem);font-weight:700;letter-spacing:-.1em;line-height:1.5;text-transform:uppercase}
+
+/* RIGHT COLUMN */
+.right{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;overflow:hidden}
+
+/* 3D MODEL — FULL PAGE BACKGROUND */
+#model-bg{position:absolute;inset:0;z-index:1;pointer-events:none}
+#model-wrap{position:absolute;top:38%;left:61%;transform:translate(-50%,-50%);width:150vh;height:95vh;pointer-events:auto;cursor:pointer}
+#three-canvas{width:100%;height:100%;display:block;transition:opacity .4s,filter .4s}
+#ascii-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .5s ease,filter .5s ease;pointer-events:none;filter:blur(2px) brightness(0.6)}
+#model-wrap:hover #three-canvas,#model-wrap.ascii-active #three-canvas{opacity:.04;filter:blur(4px)}
+#model-wrap:hover #ascii-canvas,#model-wrap.ascii-active #ascii-canvas{opacity:1;filter:blur(0) brightness(1)}
+#model-wrap:hover #ascii-canvas{animation:asciiPulse 2s ease-in-out infinite}
+@keyframes asciiPulse{0%,100%{filter:blur(0) brightness(1) drop-shadow(0 0 8px rgba(200,215,255,.3))}50%{filter:blur(0) brightness(1.15) drop-shadow(0 0 18px rgba(200,215,255,.5))}}
+
+/* FOOTER NAV */
+.ftr{display:flex;align-items:center;justify-content:center;gap:0;flex-shrink:0;padding-top:1rem;border-top:1px solid var(--white-25)}
+.ftr-item{flex:1;text-align:center;font-size:.63rem;letter-spacing:-.02em;text-transform:uppercase;color:var(--white-50);font-weight:700;font-style:italic;cursor:pointer;transition:color .25s;padding:.5rem 0}
+.ftr-item:hover{color:var(--white)}
+.ftr-item.active{color:var(--white);font-weight:700;font-style:normal;text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1.5px}
+.ftr-soon{cursor:default;opacity:.35;position:relative;pointer-events:none}
+.soon-tag{font-size:.42rem;letter-spacing:0;margin-left:.3rem;padding:.12rem .35rem;background:rgba(255,255,255,.12);border-radius:4px;vertical-align:middle;text-transform:lowercase;font-style:normal}
+.hdr-tw{font-size:.62rem;font-weight:700;letter-spacing:-.02em;color:var(--white-50);transition:color .25s;text-transform:uppercase;margin-left:1rem}
+.hdr-tw:hover{color:var(--white)}
+
+/* ── CONTENT SECTIONS (below branding page) ── */
+.content-section{padding:5rem 3.2rem;max-width:1480px;margin:0 auto}
+.section-border{border-top:1px solid var(--white-18)}
+.stag{font-size:.6rem;font-weight:700;letter-spacing:-.02em;color:var(--white-50);font-style:italic;margin-bottom:.6rem}
+.stitle{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;letter-spacing:-.1em;line-height:1.1;margin-bottom:1rem}
+.sdesc{color:var(--white-50);font-size:.82rem;line-height:1.7;max-width:520px;font-weight:700;letter-spacing:-.02em}
+
+/* Features grid */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:2rem}
+.feat-card{background:rgba(0,0,0,.08);border:1px solid var(--white-18);border-radius:12px;padding:1.6rem;transition:all .35s}
+.feat-card:hover{border-color:rgba(255,255,255,.35);transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.15)}
+.feat-ico{font-size:1.3rem;margin-bottom:.7rem;width:38px;height:38px;background:rgba(255,255,255,.08);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.feat-card h3{font-size:.78rem;font-weight:700;letter-spacing:-.05em;margin-bottom:.35rem}
+.feat-card p{font-size:.72rem;color:var(--white-50);line-height:1.6;font-family:var(--body);font-weight:400}
+
+/* Docs */
+.tabs{display:flex;gap:.4rem;margin:1.8rem 0 1.2rem;flex-wrap:wrap}
+.tab{padding:.5rem 1.1rem;background:transparent;border:1px solid var(--white-18);color:var(--white-50);border-radius:7px;font-size:.68rem;font-weight:700;cursor:pointer;transition:all .25s;font-family:var(--syn);letter-spacing:-.03em}
+.tab:hover{border-color:rgba(255,255,255,.4);color:var(--white)}
+.tab.active{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.5);color:var(--white)}
+.tab-content{display:none;animation:fadeIn .3s}
+.tab-content.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.code-block{background:rgba(0,0,0,.15);border:1px solid var(--white-18);border-radius:10px;padding:1.3rem 1.5rem;font-family:var(--mono);font-size:.7rem;line-height:1.7;color:rgba(255,255,255,.75);overflow-x:auto;margin:1rem 0;white-space:pre}
+.code-block .cm{color:var(--white-50)}
+.code-block .kw{color:#fff}
+.code-block .st{color:rgba(200,210,255,.8)}
+
+.cmd-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+.cmd-group h4{font-size:.75rem;font-weight:700;letter-spacing:-.05em;margin-bottom:.5rem}
+.cmd-group ul{list-style:none;display:flex;flex-direction:column;gap:.25rem}
+.cmd-group li{font-size:.7rem;color:var(--white-50);padding:.2rem 0;font-family:var(--body);font-weight:400}
+.cmd-group li code{font-family:var(--mono);color:var(--white);font-size:.65rem;background:rgba(255,255,255,.08);padding:.12rem .35rem;border-radius:3px;margin-right:.3rem}
+
+.profile-table{width:100%;border-collapse:collapse;margin:1rem 0}
+.profile-table th,.profile-table td{padding:.5rem .8rem;text-align:left;border-bottom:1px solid var(--white-18);font-size:.7rem}
+.profile-table th{color:var(--white);font-weight:700;letter-spacing:-.03em}
+.profile-table td:first-child{font-family:var(--mono);color:var(--white)}
+.profile-table td{color:var(--white-50);font-family:var(--body);font-weight:400}
+
+.int-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:1rem}
+.int-card{background:rgba(0,0,0,.08);border:1px solid var(--white-18);border-radius:10px;padding:1.3rem;transition:all .3s}
+.int-card:hover{border-color:rgba(255,255,255,.3)}
+.int-card h4{font-size:.78rem;font-weight:700;letter-spacing:-.05em;margin-bottom:.4rem}
+.int-card p{font-size:.68rem;color:var(--white-50);line-height:1.6;font-family:var(--body);font-weight:400}
+.int-card code{font-family:var(--mono);font-size:.62rem;background:rgba(255,255,255,.08);padding:.1rem .3rem;border-radius:3px}
+
+/* Footer */
+.page-footer{padding:2.5rem 3.2rem;text-align:center;border-top:1px solid var(--white-18);max-width:1480px;margin:0 auto}
+.page-footer p{font-size:.68rem;color:var(--white-50);font-weight:700;letter-spacing:-.02em}
+.page-footer a{text-decoration:underline;text-underline-offset:3px}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(25px);transition:all .7s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:none}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1000px){
+  .main{grid-template-columns:1fr}
+  .right{display:none}
+  .page{height:auto;min-height:100vh;padding:1.5rem 2rem 1.2rem}
+  .content-section{padding:3.5rem 2rem}
+  .feat-grid{grid-template-columns:1fr 1fr}
+  .cmd-grid{grid-template-columns:1fr}
+  .int-cards{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .feat-grid{grid-template-columns:1fr}
+  .tabs{gap:.25rem}
+  .tab{padding:.4rem .8rem;font-size:.62rem}
+  .ftr{flex-wrap:wrap;gap:.1rem}
+  .ftr-item{flex:none;padding:.4rem .7rem;font-size:.58rem}
+  .brand{letter-spacing:-.08em}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="loader-text">PORTUNUS</div>
+  <div class="loader-bar"><div class="loader-fill" id="loader-fill"></div></div>
+</div>
+
+<!-- ═══════════ BRANDING PAGE (first viewport) ═══════════ -->
+<div class="page">
+
+  <header class="hdr">
+    <div class="hdr-logo">
+      <img src="portunus.png" alt="Portunus" class="hdr-icon">
+      <span class="name">Portunus</span>
+    </div>
+    <div class="hdr-line"></div>
+    <div class="hdr-project">Structured Memory System</div>
+    <a class="hdr-tw" href="https://x.com/portunusdotio" target="_blank" rel="noopener">Twitter</a>
+    <a class="hdr-tw" href="https://pump.fun/" target="_blank" rel="noopener">$PORTUNUS</a>
+  </header>
+
+  <!-- 3D CRAB BACKGROUND (centered behind everything) -->
+  <div id="model-bg">
+    <div id="model-wrap">
+      <canvas id="three-canvas"></canvas>
+      <canvas id="ascii-canvas"></canvas>
+    </div>
+  </div>
+
+  <main class="main">
+    <section class="left">
+      <div class="row">
+        <div class="cnt">
+          <div class="terminal">
+            <pre id="term-output"></pre><span id="term-cursor" class="cursor">_</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="cnt">
+          <div class="brand-wrap">
+            <div class="brand">PORTUNUS</div>
+            <div class="brand-bar"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="cnt">
+          <div class="tagline-block">
+            <div class="tagline-text">Structured<br>Memory for<br>Autonomous Agents</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="right"></section>
+  </main>
+
+  <footer class="ftr">
+    <a class="ftr-item" href="#features">Features</a>
+    <a class="ftr-item active" href="#docs">Documentation</a>
+    <span class="ftr-item ftr-soon">GitHub<span class="soon-tag">soon</span></span>
+    <a class="ftr-item" href="https://x.com/portunusdotio" target="_blank" rel="noopener">Twitter</a>
+    <a class="ftr-item" href="https://pump.fun/" target="_blank" rel="noopener">$PORTUNUS</a>
+  </footer>
+
+</div>
+
+<!-- ═══════════ FEATURES ═══════════ -->
+<div class="content-section section-border reveal" id="features">
+  <div class="stag">// capabilities</div>
+  <h2 class="stitle">Built for<br>Autonomous Work</h2>
+  <div class="feat-grid">
+    <div class="feat-card">
+
+      <h3>Graph-Aware Context</h3>
+      <p>Entity graphs power smart retrieval. Planning, incident, handoff — each context profile surfaces exactly what your agent needs.</p>
+    </div>
+    <div class="feat-card">
+
+      <h3>Session Lifecycle</h3>
+      <p>Wake, checkpoint, sleep. Structured session management ensures nothing is lost between runs. Resume from any point.</p>
+    </div>
+    <div class="feat-card">
+
+      <h3>Task Primitives</h3>
+      <p>Built-in task tracking, backlogs, projects, and kanban boards. Your agent manages work, not just memory.</p>
+    </div>
+    <div class="feat-card">
+
+      <h3>Obsidian Integration</h3>
+      <p>Canvas dashboards, graph themes, and bidirectional kanban sync. Visualize your vault directly in Obsidian.</p>
+    </div>
+    <div class="feat-card">
+
+      <h3>Observation Pipeline</h3>
+      <p>Raw transcripts become scored observations, automatically routed into structured memory. Importance-weighted, type-tagged.</p>
+    </div>
+    <div class="feat-card">
+
+      <h3>Replay Engine</h3>
+      <p>Ingest transcripts from Claude, ChatGPT, OpenCode, and OpenClaw. Every past conversation becomes searchable memory.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ DOCS ═══════════ -->
+<div class="content-section section-border reveal" id="docs">
+  <div class="stag">// documentation</div>
+  <h2 class="stitle">Docs</h2>
+  <p class="sdesc">Everything you need — from install to advanced integrations.</p>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="quickstart">Quick Start</button>
+    <button class="tab" data-tab="cli">CLI Reference</button>
+    <button class="tab" data-tab="arch">Architecture</button>
+    <button class="tab" data-tab="session">Sessions</button>
+    <button class="tab" data-tab="integrations">Integrations</button>
+  </div>
+
+  <!-- Quick Start -->
+  <div class="tab-content active" id="tab-quickstart">
+    <div class="code-block"><span class="cm"># Install globally</span>
+<span class="kw">npm install</span> -g portunus
+
+<span class="cm"># Initialize a new vault</span>
+<span class="kw">portunus init</span> ~/memory --name my-brain
+
+<span class="cm"># Bootstrap Obsidian integration</span>
+<span class="kw">portunus setup</span> --theme neural --canvas
+
+<span class="cm"># Start a session</span>
+<span class="kw">portunus wake</span>
+
+<span class="cm"># Store a decision</span>
+<span class="kw">portunus remember</span> decision <span class="st">"Use PostgreSQL"</span> --content <span class="st">"Chosen for JSONB and reliability"</span>
+
+<span class="cm"># Search your vault</span>
+<span class="kw">portunus search</span> <span class="st">"postgresql"</span>
+<span class="kw">portunus vsearch</span> <span class="st">"what did we decide about storage"</span>
+
+<span class="cm"># Checkpoint during heavy work</span>
+<span class="kw">portunus checkpoint</span> --working-on <span class="st">"auth rollout"</span> --focus <span class="st">"token refresh"</span>
+
+<span class="cm"># End session</span>
+<span class="kw">portunus sleep</span> <span class="st">"finished auth plan"</span> --next <span class="st">"implement migration"</span></div>
+    <p style="color:var(--white-50);font-size:.72rem;margin-top:.8rem;font-family:var(--body);font-weight:400">Requires <strong style="color:var(--white)">Node.js 18+</strong>. Optional peer dependency: <code style="font-family:var(--mono);font-size:.65rem;background:rgba(255,255,255,.08);padding:.1rem .3rem;border-radius:3px">qmd</code> for advanced search.</p>
+  </div>
+
+  <!-- CLI Reference -->
+  <div class="tab-content" id="tab-cli">
+    <div class="cmd-grid">
+      <div class="cmd-group">
+        <h4>Core</h4>
+        <ul>
+          <li><code>init</code> Create or initialize a vault</li>
+          <li><code>setup</code> Bootstrap Obsidian config</li>
+          <li><code>store</code> Store a raw memory entry</li>
+          <li><code>remember</code> Store a typed memory</li>
+          <li><code>search</code> Full-text search</li>
+          <li><code>vsearch</code> Vector / semantic search</li>
+          <li><code>list</code> List vault entries</li>
+          <li><code>get</code> Retrieve a specific entry</li>
+          <li><code>stats</code> Vault statistics</li>
+        </ul>
+      </div>
+      <div class="cmd-group">
+        <h4>Context & Memory</h4>
+        <ul>
+          <li><code>context</code> Retrieve relevant context</li>
+          <li><code>inject</code> Dynamic prompt injection</li>
+          <li><code>observe</code> Run observation pipeline</li>
+          <li><code>reflect</code> Generate weekly reflection</li>
+          <li><code>graph</code> Explore entity graph</li>
+          <li><code>entities</code> List tracked entities</li>
+          <li><code>link</code> Create entity links</li>
+          <li><code>embed</code> Generate embeddings</li>
+        </ul>
+      </div>
+      <div class="cmd-group">
+        <h4>Session Management</h4>
+        <ul>
+          <li><code>wake</code> Start a new session</li>
+          <li><code>sleep</code> End session with summary</li>
+          <li><code>checkpoint</code> Save progress mid-session</li>
+          <li><code>recover</code> Recover interrupted session</li>
+          <li><code>handoff</code> Transition between agents</li>
+          <li><code>status</code> Current session status</li>
+          <li><code>recap</code> Session recap</li>
+        </ul>
+      </div>
+      <div class="cmd-group">
+        <h4>Work Management</h4>
+        <ul>
+          <li><code>task add</code> Create a task</li>
+          <li><code>task list</code> List tasks</li>
+          <li><code>backlog</code> Manage backlog</li>
+          <li><code>blocked</code> Show blocked items</li>
+          <li><code>project</code> Manage projects</li>
+          <li><code>kanban sync</code> Sync kanban board</li>
+          <li><code>canvas</code> Generate dashboard</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Architecture -->
+  <div class="tab-content" id="tab-arch">
+    <h3 style="font-size:.85rem;font-weight:700;letter-spacing:-.05em;margin-bottom:.8rem">Vault Structure</h3>
+    <div class="code-block">vault/
+├── .portunus/           <span class="cm"># Internal state & config</span>
+├── decisions/           <span class="cm"># Key architectural choices</span>
+├── lessons/             <span class="cm"># Insights & learnings</span>
+├── people/              <span class="cm"># Contact & relationship data</span>
+├── projects/            <span class="cm"># Active project tracking</span>
+├── handoffs/            <span class="cm"># Session transition notes</span>
+├── inbox/               <span class="cm"># Quick captures</span>
+└── templates/           <span class="cm"># Document templates</span></div>
+    <h3 style="font-size:.85rem;font-weight:700;letter-spacing:-.05em;margin:1.5rem 0 .8rem">Ledger Architecture</h3>
+    <div class="code-block">ledger/
+├── raw/&lt;source&gt;/                       <span class="cm"># Raw transcript chunks</span>
+├── observations/YYYY/MM/DD.md          <span class="cm"># Scored daily observations</span>
+├── reflections/YYYY-WNN.md             <span class="cm"># Weekly reflections</span>
+└── archive/observations/YYYY/MM/DD.md  <span class="cm"># Archived observations</span></div>
+    <h3 style="font-size:.85rem;font-weight:700;letter-spacing:-.05em;margin:1.5rem 0 .8rem">Observation Format</h3>
+    <div class="code-block"><span class="cm"># Each observation is scored for confidence (c) and importance (i)</span>
+- [<span class="kw">decision</span>|c=<span class="st">0.9</span>|i=<span class="st">0.8</span>] Use PostgreSQL for primary datastore
+- [<span class="kw">lesson</span>|c=<span class="st">0.7</span>|i=<span class="st">0.6</span>] Batch inserts outperform individual writes by 12x
+- [<span class="kw">fact</span>|c=<span class="st">1.0</span>|i=<span class="st">0.4</span>] API rate limit is 1000 req/min
+
+<span class="cm"># Types: decision, preference, fact, commitment,</span>
+<span class="cm">#        milestone, lesson, relationship, project</span></div>
+  </div>
+
+  <!-- Sessions -->
+  <div class="tab-content" id="tab-session">
+    <h3 style="font-size:.85rem;font-weight:700;letter-spacing:-.05em;margin-bottom:.8rem">Session Workflow</h3>
+    <div class="code-block"><span class="cm"># 1. Start session — loads vault context</span>
+<span class="kw">portunus wake</span>
+
+<span class="cm"># 2. Checkpoint progress at any time</span>
+<span class="kw">portunus checkpoint</span> --working-on <span class="st">"feature X"</span> --focus <span class="st">"edge cases"</span>
+
+<span class="cm"># 3. Retrieve context before complex decisions</span>
+<span class="kw">portunus context</span> <span class="st">"authentication"</span>
+<span class="kw">portunus inject</span> <span class="st">"summarize what we know about auth tokens"</span>
+
+<span class="cm"># 4. End session — summarize and plan next steps</span>
+<span class="kw">portunus sleep</span> <span class="st">"completed auth module"</span> --next <span class="st">"write integration tests"</span>
+
+<span class="cm"># Recover from interrupted session</span>
+<span class="kw">portunus recover</span>
+
+<span class="cm"># Hand off to another agent</span>
+<span class="kw">portunus handoff</span> --to agent-02 --context <span class="st">"continue from auth"</span></div>
+    <h3 style="font-size:.85rem;font-weight:700;letter-spacing:-.05em;margin:1.5rem 0 .8rem">Context Profiles</h3>
+    <table class="profile-table">
+      <thead><tr><th>Profile</th><th>Purpose</th><th>Use Case</th></tr></thead>
+      <tbody>
+        <tr><td>default</td><td>Balanced retrieval</td><td>General tasks and queries</td></tr>
+        <tr><td>planning</td><td>Broader strategic context</td><td>Architecture decisions, roadmap</td></tr>
+        <tr><td>incident</td><td>Recent events and blockers</td><td>Debugging, firefighting</td></tr>
+        <tr><td>handoff</td><td>Session transition context</td><td>Agent-to-agent continuity</td></tr>
+        <tr><td>auto</td><td>Hook-selected profile</td><td>Automatic based on current task</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Integrations -->
+  <div class="tab-content" id="tab-integrations">
+    <div class="int-cards">
+      <div class="int-card">
+        <h4>Obsidian</h4>
+        <p>Graph themes (<code>neural</code>, <code>minimal</code>), canvas dashboards, Bases views for tasks, bidirectional kanban sync. Run <code>portunus setup --theme neural --canvas</code> to bootstrap.</p>
+      </div>
+      <div class="int-card">
+        <h4>OpenClaw</h4>
+        <p>First-class hook pack. Install with <code>openclaw hooks install portunus</code> then <code>openclaw hooks enable portunus</code>. Auto session lifecycle and context injection.</p>
+      </div>
+      <div class="int-card">
+        <h4>Tailscale + WebDAV</h4>
+        <p>Serve vault over Tailscale for mobile sync. WebDAV at <code>/webdav</code> for Obsidian mobile. Run <code>portunus tailscale-serve --vault ~/memory</code>.</p>
+      </div>
+    </div>
+    <h3 style="font-size:.85rem;font-weight:700;letter-spacing:-.05em;margin:1.8rem 0 .8rem">Replay Sources</h3>
+    <div class="code-block"><span class="cm"># Ingest transcripts from multiple platforms</span>
+<span class="kw">portunus replay</span> --source <span class="st">claude</span>      <span class="cm"># Anthropic Claude</span>
+<span class="kw">portunus replay</span> --source <span class="st">chatgpt</span>    <span class="cm"># OpenAI ChatGPT</span>
+<span class="kw">portunus replay</span> --source <span class="st">opencode</span>   <span class="cm"># OpenCode sessions</span>
+<span class="kw">portunus replay</span> --source <span class="st">openclaw</span>   <span class="cm"># OpenClaw transcripts</span></div>
+  </div>
+</div>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<div class="page-footer section-border">
+  <p>Portunus &copy; 2025 — <a href="https://github.com/Versatly/clawvault" target="_blank" rel="noopener">GitHub</a> &middot; MIT License &middot; Local-first. Markdown-first. Built to survive.</p>
+</div>
+
+<!-- ═══════════ THREE.JS ═══════════ -->
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+
+const wrap = document.getElementById('model-wrap');
+const tCvs = document.getElementById('three-canvas');
+const aCvs = document.getElementById('ascii-canvas');
+const aCtx = aCvs.getContext('2d');
+const loaderEl = document.getElementById('loader');
+const loaderFill = document.getElementById('loader-fill');
+
+const renderer = new THREE.WebGLRenderer({canvas:tCvs, alpha:true, antialias:true});
+renderer.setClearColor(0x000000,0);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.3;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(32,1,.1,100);
+camera.position.set(0,1.2,5);
+camera.lookAt(0,.3,0);
+
+scene.add(new THREE.AmbientLight(0x4466ff,.8));
+const k=new THREE.DirectionalLight(0x6699ff,2.2);k.position.set(3,4,5);scene.add(k);
+const f=new THREE.DirectionalLight(0x3355dd,1.2);f.position.set(-3,2,-3);scene.add(f);
+const r=new THREE.DirectionalLight(0x88aaff,.7);r.position.set(0,-2,-4);scene.add(r);
+
+const sCvs=document.createElement('canvas');
+const sCtx=sCvs.getContext('2d',{willReadFrequently:true});
+
+let mx=0,my=0;
+const raycaster=new THREE.Raycaster();
+const rmouse=new THREE.Vector2();
+document.addEventListener('mousemove',e=>{
+  mx=(e.clientX/innerWidth-.5)*2;my=(e.clientY/innerHeight-.5)*2;
+  if(model){
+    const rect=tCvs.getBoundingClientRect();
+    rmouse.x=((e.clientX-rect.left)/rect.width)*2-1;
+    rmouse.y=-((e.clientY-rect.top)/rect.height)*2+1;
+    raycaster.setFromCamera(rmouse,camera);
+    const hits=raycaster.intersectObject(model,true);
+    wrap.classList.toggle('ascii-active',hits.length>0);
+  }
+});
+
+function resize(){
+  const b=wrap.getBoundingClientRect();
+  const dpr=Math.min(devicePixelRatio,2);
+  renderer.setSize(b.width,b.height);
+  renderer.setPixelRatio(dpr);
+  camera.aspect=b.width/b.height;
+  camera.updateProjectionMatrix();
+  aCvs.width=b.width*dpr;aCvs.height=b.height*dpr;
+  aCvs.style.width=b.width+'px';aCvs.style.height=b.height+'px';
+}
+resize();
+addEventListener('resize',resize);
+
+const ASCII=' .:;+*%S#@';
+const CW=11,CH=20;
+
+let model=null;
+new GLTFLoader().load('model/scene.gltf',
+  g=>{
+    model=g.scene;
+    const box=new THREE.Box3().setFromObject(model);
+    const c=box.getCenter(new THREE.Vector3());
+    const s=box.getSize(new THREE.Vector3());
+    const sc=2.43/Math.max(s.x,s.y,s.z);
+    model.scale.setScalar(sc);
+    model.position.sub(c.multiplyScalar(sc));
+    model.position.y-=.15;
+    model.traverse(child=>{
+      if(child.isMesh){
+        child.material=new THREE.MeshStandardMaterial({color:0x6080cc,roughness:.75,metalness:.15});
+      }
+    });
+    scene.add(model);
+    loaderFill.style.width='100%';
+    setTimeout(()=>loaderEl.classList.add('hidden'),500);
+  },
+  xhr=>{if(xhr.total)loaderFill.style.width=Math.floor(xhr.loaded/xhr.total*90)+'%'},
+  ()=>{loaderFill.style.width='100%';setTimeout(()=>loaderEl.classList.add('hidden'),500)}
+);
+
+/* Mobile touch toggle */
+let asciiOn=false;
+wrap.addEventListener('touchstart',e=>{e.preventDefault();asciiOn=!asciiOn;wrap.classList.toggle('ascii-active',asciiOn)},{passive:false});
+
+function tick(t){
+  requestAnimationFrame(tick);
+  if(!model)return;
+  const s=t*.001;
+  model.rotation.y=s*.25+mx*.3;
+  model.rotation.x=Math.sin(s*.15)*.08+my*.1;
+  renderer.render(scene,camera);
+
+  const rect=wrap.getBoundingClientRect();
+  const cols=Math.floor(rect.width/CW);
+  const rows=Math.floor(rect.height/CH);
+  if(cols<=0||rows<=0)return;
+  sCvs.width=cols;sCvs.height=rows;
+  sCtx.clearRect(0,0,cols,rows);
+  sCtx.drawImage(tCvs,0,0,cols,rows);
+  const px=sCtx.getImageData(0,0,cols,rows).data;
+  const dpr=Math.min(devicePixelRatio,2);
+
+  aCtx.clearRect(0,0,aCvs.width,aCvs.height);
+  aCtx.font=`bold ${CH*dpr}px "SF Mono","Cascadia Code",Consolas,monospace`;
+  aCtx.textBaseline='top';
+
+  for(let y=0;y<rows;y++){
+    for(let x=0;x<cols;x++){
+      const i=(y*cols+x)*4;
+      const rv=px[i],gv=px[i+1],bv=px[i+2],av=px[i+3];
+      if(av<12)continue;
+      const br=(rv*.299+gv*.587+bv*.114)/255;
+      const ch=ASCII[Math.floor(br*(ASCII.length-1))];
+      if(ch===' ')continue;
+      const cr=Math.min(255,rv*.08+200);
+      const cg=Math.min(255,gv*.1+215);
+      const cb=255;
+      aCtx.fillStyle=`rgba(${cr|0},${cg|0},${cb|0},${(.5+br*.5).toFixed(2)})`;
+      aCtx.fillText(ch,x*CW*dpr,y*CH*dpr);
+    }
+  }
+}
+requestAnimationFrame(tick);
+
+/* ── UI ── */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-'+tab.dataset.tab).classList.add('active');
+  });
+});
+
+/* ── TERMINAL TYPING ── */
+(function(){
+  const out=document.getElementById('term-output');
+  const cur=document.getElementById('term-cursor');
+  const sequences=[
+    {cmd:'$portunus wake',delay:60,pause:400,lines:[
+      '[OK] Session started',
+      '[OK] Context loaded:',
+      '     + 42 decisions',
+      '     + 18 lessons',
+      '     + 7 active projects',
+    ]},
+    {cmd:'$portunus context "auth"',delay:50,pause:400,lines:[
+      'Found 6 relevant memories',
+      'Graph depth: 3 hops',
+      'Profile: planning',
+    ]},
+    {cmd:'$portunus checkpoint',delay:50,pause:350,lines:[
+      '[OK] Session checkpointed',
+      '     working-on: auth rollout',
+      '     focus: token refresh',
+    ]},
+    {cmd:'$portunus sleep "done"',delay:55,pause:400,lines:[
+      '[OK] Session ended',
+      '[OK] Handoff note saved',
+      '     next: write tests',
+    ]},
+  ];
+  let text='';
+  async function wait(ms){return new Promise(r=>setTimeout(r,ms))}
+  async function typeCmd(str,delay){
+    for(const ch of str){text+=ch;out.textContent=text;out.scrollTop=out.scrollHeight;await wait(delay)}
+  }
+  async function printLine(str,speed){
+    await wait(speed);text+=str+'\n';out.textContent=text;out.scrollTop=out.scrollHeight;
+  }
+  async function run(){
+    for(const seq of sequences){
+      await typeCmd(seq.cmd,seq.delay);
+      text+='\n';out.textContent=text;out.scrollTop=out.scrollHeight;
+      await wait(seq.pause);
+      for(const ln of seq.lines){await printLine(ln,80)}
+      text+='\n';out.textContent=text;out.scrollTop=out.scrollHeight;
+      await wait(600);
+    }
+    text+='ready_\n';out.textContent=text;out.scrollTop=out.scrollHeight;
+    await wait(500);
+    await typeCmd('CA : TBA',60);
+    out.scrollTop=out.scrollHeight;cur.style.display='none';
+  }
+  run();
+})();
+</script>
+</body>
+</html>
