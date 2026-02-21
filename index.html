@@ -160,14 +160,83 @@ a{color:var(--white);text-decoration:none}
   .feat-grid{grid-template-columns:1fr 1fr}
   .cmd-grid{grid-template-columns:1fr}
   .int-cards{grid-template-columns:1fr}
+  #model-wrap{left:50%;top:45%;width:120vh;height:80vh}
+  .hdr-project{display:none}
 }
 @media(max-width:600px){
+  .page{padding:1.2rem 1.2rem 1rem;min-height:100svh}
+  .content-section{padding:2.5rem 1.2rem}
+  .page-footer{padding:2rem 1.2rem}
+
+  /* Header */
+  .hdr{gap:.6rem}
+  .hdr-icon{width:28px;height:28px}
+  .hdr-logo span.name{font-size:.62rem}
+  .hdr-line{display:none}
+  .hdr-project{display:none}
+  .hdr-tw{font-size:.52rem;margin-left:.5rem}
+
+  /* Main content */
+  .left{padding:.8rem 0}
+  .row{gap:1rem}
+  .brand{font-size:clamp(2rem,10vw,3.5rem);letter-spacing:-.08em}
+  .brand-bar{width:60px;margin-top:.8rem}
+  .tagline-text{font-size:clamp(.65rem,2.5vw,.85rem)}
+
+  /* Terminal */
+  .terminal{max-width:100%;padding:.8rem 1rem;font-size:.55rem;max-height:160px}
+  .terminal pre{height:8em}
+
+  /* 3D model */
+  #model-wrap{left:50%;top:50%;width:100vw;height:70vh}
+
+  /* Footer nav */
+  .ftr{flex-wrap:wrap;gap:.15rem .4rem;padding-top:.8rem}
+  .ftr-item{flex:none;padding:.35rem .5rem;font-size:.5rem}
+  .soon-tag{font-size:.36rem;padding:.08rem .25rem}
+
+  /* Features */
   .feat-grid{grid-template-columns:1fr}
-  .tabs{gap:.25rem}
-  .tab{padding:.4rem .8rem;font-size:.62rem}
-  .ftr{flex-wrap:wrap;gap:.1rem}
-  .ftr-item{flex:none;padding:.4rem .7rem;font-size:.58rem}
-  .brand{letter-spacing:-.08em}
+  .feat-card{padding:1.2rem}
+  .feat-card h3{font-size:.72rem}
+  .feat-card p{font-size:.66rem}
+
+  /* Section titles */
+  .stitle{font-size:clamp(1.3rem,6vw,2rem)}
+  .sdesc{font-size:.72rem}
+
+  /* Tabs */
+  .tabs{gap:.2rem;margin:1.2rem 0 .8rem}
+  .tab{padding:.35rem .6rem;font-size:.55rem}
+
+  /* Code blocks */
+  .code-block{padding:.8rem 1rem;font-size:.58rem;line-height:1.5}
+
+  /* CLI grid */
+  .cmd-group h4{font-size:.7rem}
+  .cmd-group li{font-size:.62rem}
+  .cmd-group li code{font-size:.56rem}
+
+  /* Profile table */
+  .profile-table th,.profile-table td{padding:.35rem .5rem;font-size:.6rem}
+
+  /* Integration cards */
+  .int-cards{grid-template-columns:1fr}
+  .int-card{padding:1rem}
+  .int-card h4{font-size:.72rem}
+  .int-card p{font-size:.62rem}
+
+  /* Footer */
+  .page-footer p{font-size:.58rem}
+}
+
+/* Extra small screens */
+@media(max-width:380px){
+  .brand{font-size:clamp(1.6rem,9vw,2.5rem)}
+  .terminal{font-size:.48rem;padding:.6rem .8rem}
+  .terminal pre{height:7em}
+  .hdr-tw{font-size:.46rem;margin-left:.3rem}
+  .ftr-item{font-size:.44rem;padding:.3rem .4rem}
 }
 </style>
 </head>
@@ -233,7 +302,7 @@ a{color:var(--white);text-decoration:none}
   <footer class="ftr">
     <a class="ftr-item" href="#features">Features</a>
     <a class="ftr-item active" href="#docs">Documentation</a>
-    <span class="ftr-item ftr-soon">GitHub<span class="soon-tag">soon</span></span>
+    <a class="ftr-item" href="https://github.com/portunus-code/portunus" target="_blank" rel="noopener">GitHub</a>
     <a class="ftr-item" href="https://x.com/portunusdotio" target="_blank" rel="noopener">Twitter</a>
     <a class="ftr-item" href="https://pump.fun/" target="_blank" rel="noopener">$PORTUNUS</a>
   </footer>
@@ -294,8 +363,9 @@ a{color:var(--white);text-decoration:none}
 
   <!-- Quick Start -->
   <div class="tab-content active" id="tab-quickstart">
-    <div class="code-block"><span class="cm"># Install globally</span>
-<span class="kw">npm install</span> -g portunus
+    <div class="code-block"><span class="cm"># Clone the repository</span>
+<span class="kw">git clone</span> https://github.com/portunus-code/portunus.git
+<span class="kw">cd</span> portunus
 
 <span class="cm"># Initialize a new vault</span>
 <span class="kw">portunus init</span> ~/memory --name my-brain
@@ -318,7 +388,7 @@ a{color:var(--white);text-decoration:none}
 
 <span class="cm"># End session</span>
 <span class="kw">portunus sleep</span> <span class="st">"finished auth plan"</span> --next <span class="st">"implement migration"</span></div>
-    <p style="color:var(--white-50);font-size:.72rem;margin-top:.8rem;font-family:var(--body);font-weight:400">Requires <strong style="color:var(--white)">Node.js 18+</strong>. Optional peer dependency: <code style="font-family:var(--mono);font-size:.65rem;background:rgba(255,255,255,.08);padding:.1rem .3rem;border-radius:3px">qmd</code> for advanced search.</p>
+    <p style="color:var(--white-50);font-size:.72rem;margin-top:.8rem;font-family:var(--body);font-weight:400">Requires <strong style="color:var(--white)">Node.js 18+</strong>. See <a href="https://github.com/portunus-code/portunus" target="_blank" rel="noopener" style="color:var(--white);text-decoration:underline;text-underline-offset:3px">GitHub</a> for full setup instructions.</p>
   </div>
 
   <!-- CLI Reference -->
@@ -467,7 +537,7 @@ a{color:var(--white);text-decoration:none}
 
 <!-- ═══════════ FOOTER ═══════════ -->
 <div class="page-footer section-border">
-  <p>Portunus &copy; 2025 — <a href="https://github.com/Versatly/clawvault" target="_blank" rel="noopener">GitHub</a> &middot; MIT License &middot; Local-first. Markdown-first. Built to survive.</p>
+  <p>Portunus &copy; 2025 — <a href="https://github.com/portunus-code/portunus" target="_blank" rel="noopener">GitHub</a> &middot; MIT License &middot; Local-first. Markdown-first. Built to survive.</p>
 </div>
 
 <!-- ═══════════ THREE.JS ═══════════ -->
@@ -519,9 +589,10 @@ document.addEventListener('mousemove',e=>{
   }
 });
 
+const isMobile=window.matchMedia('(max-width:600px)').matches;
 function resize(){
   const b=wrap.getBoundingClientRect();
-  const dpr=Math.min(devicePixelRatio,2);
+  const dpr=Math.min(devicePixelRatio,isMobile?1.5:2);
   renderer.setSize(b.width,b.height);
   renderer.setPixelRatio(dpr);
   camera.aspect=b.width/b.height;
