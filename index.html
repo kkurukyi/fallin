@@ -604,6 +604,11 @@ const ASCII=' .:;+*%S#@';
 const CW=11,CH=20;
 
 let model=null;
+const texLoader=new THREE.TextureLoader();
+const tex=texLoader.load('model/teddy-bear.jpg');
+tex.colorSpace=THREE.SRGBColorSpace;
+const bearMat=new THREE.MeshStandardMaterial({map:tex,roughness:.85,metalness:0});
+
 new FBXLoader().load('model/teddy-bear.fbx',
   obj=>{
     model=obj;
@@ -616,12 +621,9 @@ new FBXLoader().load('model/teddy-bear.fbx',
     model.position.y-=.15;
     model.rotation.y=(20+180)*Math.PI/180;
     model.rotation.z=(-30-80)*Math.PI/180;
-    const texLoader=new THREE.TextureLoader();
-    const tex=texLoader.load('model/teddy-bear.jpg');
-    tex.colorSpace=THREE.SRGBColorSpace;
     model.traverse(child=>{
       if(child.isMesh){
-        child.material=new THREE.MeshStandardMaterial({map:tex,roughness:.85,metalness:0});
+        child.material=bearMat;
       }
     });
     scene.add(model);
