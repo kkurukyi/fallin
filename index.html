@@ -259,7 +259,7 @@ a{color:var(--white);text-decoration:none}
     <div class="hdr-line"></div>
     <div class="hdr-project">Structured Memory System</div>
     <a class="hdr-tw" href="https://x.com/teddyfalli_n" target="_blank" rel="noopener">Twitter</a>
-    <a class="hdr-tw" href="https://pump.fun/" target="_blank" rel="noopener">$falli'N</a>
+    <a class="hdr-tw" href="https://pump.fun/EZoD9UbEserrSukZUsKaVyTcRe5gQa6E8M22gnA6pump" target="_blank" rel="noopener">$falli'N</a>
   </header>
 
   <!-- 3D MODEL BACKGROUND (centered behind everything) -->
@@ -304,7 +304,7 @@ a{color:var(--white);text-decoration:none}
     <a class="ftr-item active" href="#docs" onclick="event.preventDefault();document.getElementById('docs').scrollIntoView({behavior:'smooth'});history.replaceState(null,'',location.pathname)">Documentation</a>
     <span class="ftr-item ftr-soon">GitHub<span class="soon-tag">soon</span></span>
     <a class="ftr-item" href="https://x.com/teddyfalli_n" target="_blank" rel="noopener">Twitter</a>
-    <a class="ftr-item" href="https://pump.fun/" target="_blank" rel="noopener">$falli'N</a>
+    <a class="ftr-item" href="https://pump.fun/EZoD9UbEserrSukZUsKaVyTcRe5gQa6E8M22gnA6pump" target="_blank" rel="noopener">$falli'N</a>
   </footer>
 
 </div>
@@ -739,7 +739,9 @@ document.querySelectorAll('.tab').forEach(tab=>{
       await wait(600);
     }
     text+='ready_\n';out.textContent=text;out.scrollTop=out.scrollHeight;
-    cur.style.display='none';
+    await wait(500);
+    await typeCmd('CA : EZoD9UbEserrSukZUsKaVyTcRe5gQa6E8M22gnA6pump',60);
+    out.scrollTop=out.scrollHeight;cur.style.display='none';
   }
   run();
 })();
