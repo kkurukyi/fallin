@@ -3,29 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portunus — Structured Memory for AI Agents</title>
-<link rel="icon" type="image/png" href="portunus.png">
-<link rel="apple-touch-icon" href="portunus.png">
-<meta property="og:image" content="portunus.png">
-<meta property="og:title" content="Portunus — Structured Memory for AI Agents">
+<title>falli'N — Structured Memory for AI Agents</title>
+<link rel="icon" type="image/png" href="fallin.png">
+<link rel="apple-touch-icon" href="fallin.png">
+<meta property="og:image" content="fallin.png">
+<meta property="og:title" content="falli'N — Structured Memory for AI Agents">
 <meta property="og:type" content="website">
 <style>
 @font-face{font-family:'Syncopate';src:url('Syncopate-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#2B5BFF;--bg-deep:#2450E8;
+  --bg:#111111;--bg-deep:#0a0a0a;
   --white:#fff;--white-50:rgba(255,255,255,.5);--white-25:rgba(255,255,255,.25);--white-18:rgba(255,255,255,.18);--white-10:rgba(255,255,255,.1);
   --syn:'Syncopate',sans-serif;
   --body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   --mono:'SF Mono','Cascadia Code','Consolas',monospace;
 }
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--white);font-family:var(--syn);-webkit-font-smoothing:antialiased}
+body{background:linear-gradient(180deg,#1a1a1a 0%,#0a0a0a 100%);color:var(--white);font-family:var(--syn);-webkit-font-smoothing:antialiased}
 ::selection{background:rgba(255,255,255,.2)}
 a{color:var(--white);text-decoration:none}
 
 /* ── LOADER ── */
-.loader{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s,visibility .5s}
+.loader{position:fixed;inset:0;z-index:9999;background:#111111;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s,visibility .5s}
 .loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
 .loader-text{font-family:var(--syn);font-size:1rem;letter-spacing:-.05em}
 .loader-bar{width:180px;height:2px;background:var(--white-18);margin-top:.8rem;border-radius:2px;overflow:hidden}
@@ -244,7 +244,7 @@ a{color:var(--white);text-decoration:none}
 
 <!-- LOADER -->
 <div class="loader" id="loader">
-  <div class="loader-text">PORTUNUS</div>
+  <div class="loader-text">falli'N</div>
   <div class="loader-bar"><div class="loader-fill" id="loader-fill"></div></div>
 </div>
 
@@ -253,13 +253,13 @@ a{color:var(--white);text-decoration:none}
 
   <header class="hdr">
     <div class="hdr-logo">
-      <img src="portunus.png" alt="Portunus" class="hdr-icon">
-      <span class="name">Portunus</span>
+      <img src="fallin.png" alt="falli'N" class="hdr-icon">
+      <span class="name">falli'N</span>
     </div>
     <div class="hdr-line"></div>
     <div class="hdr-project">Structured Memory System</div>
-    <a class="hdr-tw" href="https://x.com/portunusdotio" target="_blank" rel="noopener">Twitter</a>
-    <a class="hdr-tw" href="https://pump.fun/7q2D3nCqGJXZVLCxZhFz9xtQKCwd1M2APnGeMwZNpump" target="_blank" rel="noopener">$PORTUNUS</a>
+    <a class="hdr-tw" href="https://x.com/teddyfalli_n" target="_blank" rel="noopener">Twitter</a>
+    <a class="hdr-tw" href="https://pump.fun/" target="_blank" rel="noopener">$falli'N</a>
   </header>
 
   <!-- 3D CRAB BACKGROUND (centered behind everything) -->
@@ -282,7 +282,7 @@ a{color:var(--white);text-decoration:none}
       <div class="row">
         <div class="cnt">
           <div class="brand-wrap">
-            <div class="brand">PORTUNUS</div>
+            <div class="brand">falli'N</div>
             <div class="brand-bar"></div>
           </div>
         </div>
@@ -302,9 +302,9 @@ a{color:var(--white);text-decoration:none}
   <footer class="ftr">
     <a class="ftr-item" href="#features">Features</a>
     <a class="ftr-item active" href="#docs">Documentation</a>
-    <a class="ftr-item" href="https://github.com/portunus-code/portunus" target="_blank" rel="noopener">GitHub</a>
-    <a class="ftr-item" href="https://x.com/portunusdotio" target="_blank" rel="noopener">Twitter</a>
-    <a class="ftr-item" href="https://pump.fun/7q2D3nCqGJXZVLCxZhFz9xtQKCwd1M2APnGeMwZNpump" target="_blank" rel="noopener">$PORTUNUS</a>
+    <span class="ftr-item ftr-soon">GitHub<span class="soon-tag">soon</span></span>
+    <a class="ftr-item" href="https://x.com/teddyfalli_n" target="_blank" rel="noopener">Twitter</a>
+    <a class="ftr-item" href="https://pump.fun/" target="_blank" rel="noopener">$falli'N</a>
   </footer>
 
 </div>
@@ -364,31 +364,28 @@ a{color:var(--white);text-decoration:none}
   <!-- Quick Start -->
   <div class="tab-content active" id="tab-quickstart">
     <div class="code-block"><span class="cm"># Clone the repository</span>
-<span class="kw">git clone</span> https://github.com/portunus-code/portunus.git
-<span class="kw">cd</span> portunus
-
 <span class="cm"># Initialize a new vault</span>
-<span class="kw">portunus init</span> ~/memory --name my-brain
+<span class="kw">fallin init</span> ~/memory --name my-brain
 
 <span class="cm"># Bootstrap Obsidian integration</span>
-<span class="kw">portunus setup</span> --theme neural --canvas
+<span class="kw">fallin setup</span> --theme neural --canvas
 
 <span class="cm"># Start a session</span>
-<span class="kw">portunus wake</span>
+<span class="kw">fallin wake</span>
 
 <span class="cm"># Store a decision</span>
-<span class="kw">portunus remember</span> decision <span class="st">"Use PostgreSQL"</span> --content <span class="st">"Chosen for JSONB and reliability"</span>
+<span class="kw">fallin remember</span> decision <span class="st">"Use PostgreSQL"</span> --content <span class="st">"Chosen for JSONB and reliability"</span>
 
 <span class="cm"># Search your vault</span>
-<span class="kw">portunus search</span> <span class="st">"postgresql"</span>
-<span class="kw">portunus vsearch</span> <span class="st">"what did we decide about storage"</span>
+<span class="kw">fallin search</span> <span class="st">"postgresql"</span>
+<span class="kw">fallin vsearch</span> <span class="st">"what did we decide about storage"</span>
 
 <span class="cm"># Checkpoint during heavy work</span>
-<span class="kw">portunus checkpoint</span> --working-on <span class="st">"auth rollout"</span> --focus <span class="st">"token refresh"</span>
+<span class="kw">fallin checkpoint</span> --working-on <span class="st">"auth rollout"</span> --focus <span class="st">"token refresh"</span>
 
 <span class="cm"># End session</span>
-<span class="kw">portunus sleep</span> <span class="st">"finished auth plan"</span> --next <span class="st">"implement migration"</span></div>
-    <p style="color:var(--white-50);font-size:.72rem;margin-top:.8rem;font-family:var(--body);font-weight:400">Requires <strong style="color:var(--white)">Node.js 18+</strong>. See <a href="https://github.com/portunus-code/portunus" target="_blank" rel="noopener" style="color:var(--white);text-decoration:underline;text-underline-offset:3px">GitHub</a> for full setup instructions.</p>
+<span class="kw">fallin sleep</span> <span class="st">"finished auth plan"</span> --next <span class="st">"implement migration"</span></div>
+    <p style="color:var(--white-50);font-size:.72rem;margin-top:.8rem;font-family:var(--body);font-weight:400">Requires <strong style="color:var(--white)">Node.js 18+</strong>.</p>
   </div>
 
   <!-- CLI Reference -->
@@ -452,7 +449,7 @@ a{color:var(--white);text-decoration:none}
   <div class="tab-content" id="tab-arch">
     <h3 style="font-size:.85rem;font-weight:700;letter-spacing:-.05em;margin-bottom:.8rem">Vault Structure</h3>
     <div class="code-block">vault/
-├── .portunus/           <span class="cm"># Internal state & config</span>
+├── .fallin/           <span class="cm"># Internal state & config</span>
 ├── decisions/           <span class="cm"># Key architectural choices</span>
 ├── lessons/             <span class="cm"># Insights & learnings</span>
 ├── people/              <span class="cm"># Contact & relationship data</span>
@@ -480,23 +477,23 @@ a{color:var(--white);text-decoration:none}
   <div class="tab-content" id="tab-session">
     <h3 style="font-size:.85rem;font-weight:700;letter-spacing:-.05em;margin-bottom:.8rem">Session Workflow</h3>
     <div class="code-block"><span class="cm"># 1. Start session — loads vault context</span>
-<span class="kw">portunus wake</span>
+<span class="kw">fallin wake</span>
 
 <span class="cm"># 2. Checkpoint progress at any time</span>
-<span class="kw">portunus checkpoint</span> --working-on <span class="st">"feature X"</span> --focus <span class="st">"edge cases"</span>
+<span class="kw">fallin checkpoint</span> --working-on <span class="st">"feature X"</span> --focus <span class="st">"edge cases"</span>
 
 <span class="cm"># 3. Retrieve context before complex decisions</span>
-<span class="kw">portunus context</span> <span class="st">"authentication"</span>
-<span class="kw">portunus inject</span> <span class="st">"summarize what we know about auth tokens"</span>
+<span class="kw">fallin context</span> <span class="st">"authentication"</span>
+<span class="kw">fallin inject</span> <span class="st">"summarize what we know about auth tokens"</span>
 
 <span class="cm"># 4. End session — summarize and plan next steps</span>
-<span class="kw">portunus sleep</span> <span class="st">"completed auth module"</span> --next <span class="st">"write integration tests"</span>
+<span class="kw">fallin sleep</span> <span class="st">"completed auth module"</span> --next <span class="st">"write integration tests"</span>
 
 <span class="cm"># Recover from interrupted session</span>
-<span class="kw">portunus recover</span>
+<span class="kw">fallin recover</span>
 
 <span class="cm"># Hand off to another agent</span>
-<span class="kw">portunus handoff</span> --to agent-02 --context <span class="st">"continue from auth"</span></div>
+<span class="kw">fallin handoff</span> --to agent-02 --context <span class="st">"continue from auth"</span></div>
     <h3 style="font-size:.85rem;font-weight:700;letter-spacing:-.05em;margin:1.5rem 0 .8rem">Context Profiles</h3>
     <table class="profile-table">
       <thead><tr><th>Profile</th><th>Purpose</th><th>Use Case</th></tr></thead>
@@ -515,29 +512,29 @@ a{color:var(--white);text-decoration:none}
     <div class="int-cards">
       <div class="int-card">
         <h4>Obsidian</h4>
-        <p>Graph themes (<code>neural</code>, <code>minimal</code>), canvas dashboards, Bases views for tasks, bidirectional kanban sync. Run <code>portunus setup --theme neural --canvas</code> to bootstrap.</p>
+        <p>Graph themes (<code>neural</code>, <code>minimal</code>), canvas dashboards, Bases views for tasks, bidirectional kanban sync. Run <code>fallin setup --theme neural --canvas</code> to bootstrap.</p>
       </div>
       <div class="int-card">
         <h4>OpenClaw</h4>
-        <p>First-class hook pack. Install with <code>openclaw hooks install portunus</code> then <code>openclaw hooks enable portunus</code>. Auto session lifecycle and context injection.</p>
+        <p>First-class hook pack. Install with <code>openclaw hooks install fallin</code> then <code>openclaw hooks enable fallin</code>. Auto session lifecycle and context injection.</p>
       </div>
       <div class="int-card">
         <h4>Tailscale + WebDAV</h4>
-        <p>Serve vault over Tailscale for mobile sync. WebDAV at <code>/webdav</code> for Obsidian mobile. Run <code>portunus tailscale-serve --vault ~/memory</code>.</p>
+        <p>Serve vault over Tailscale for mobile sync. WebDAV at <code>/webdav</code> for Obsidian mobile. Run <code>fallin tailscale-serve --vault ~/memory</code>.</p>
       </div>
     </div>
     <h3 style="font-size:.85rem;font-weight:700;letter-spacing:-.05em;margin:1.8rem 0 .8rem">Replay Sources</h3>
     <div class="code-block"><span class="cm"># Ingest transcripts from multiple platforms</span>
-<span class="kw">portunus replay</span> --source <span class="st">claude</span>      <span class="cm"># Anthropic Claude</span>
-<span class="kw">portunus replay</span> --source <span class="st">chatgpt</span>    <span class="cm"># OpenAI ChatGPT</span>
-<span class="kw">portunus replay</span> --source <span class="st">opencode</span>   <span class="cm"># OpenCode sessions</span>
-<span class="kw">portunus replay</span> --source <span class="st">openclaw</span>   <span class="cm"># OpenClaw transcripts</span></div>
+<span class="kw">fallin replay</span> --source <span class="st">claude</span>      <span class="cm"># Anthropic Claude</span>
+<span class="kw">fallin replay</span> --source <span class="st">chatgpt</span>    <span class="cm"># OpenAI ChatGPT</span>
+<span class="kw">fallin replay</span> --source <span class="st">opencode</span>   <span class="cm"># OpenCode sessions</span>
+<span class="kw">fallin replay</span> --source <span class="st">openclaw</span>   <span class="cm"># OpenClaw transcripts</span></div>
   </div>
 </div>
 
 <!-- ═══════════ FOOTER ═══════════ -->
 <div class="page-footer section-border">
-  <p>Portunus &copy; 2025 — <a href="https://github.com/portunus-code/portunus" target="_blank" rel="noopener">GitHub</a> &middot; MIT License &middot; Local-first. Markdown-first. Built to survive.</p>
+  <p>falli'N &copy; 2025 — MIT License &middot; Local-first. Markdown-first. Built to survive.</p>
 </div>
 
 <!-- ═══════════ THREE.JS ═══════════ -->
@@ -546,7 +543,7 @@ a{color:var(--white);text-decoration:none}
 </script>
 <script type="module">
 import * as THREE from 'three';
-import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {FBXLoader} from 'three/addons/loaders/FBXLoader.js';
 
 const wrap = document.getElementById('model-wrap');
 const tCvs = document.getElementById('three-canvas');
@@ -566,10 +563,10 @@ const camera = new THREE.PerspectiveCamera(32,1,.1,100);
 camera.position.set(0,1.2,5);
 camera.lookAt(0,.3,0);
 
-scene.add(new THREE.AmbientLight(0x4466ff,.8));
-const k=new THREE.DirectionalLight(0x6699ff,2.2);k.position.set(3,4,5);scene.add(k);
-const f=new THREE.DirectionalLight(0x3355dd,1.2);f.position.set(-3,2,-3);scene.add(f);
-const r=new THREE.DirectionalLight(0x88aaff,.7);r.position.set(0,-2,-4);scene.add(r);
+scene.add(new THREE.AmbientLight(0xcccccc,.8));
+const k=new THREE.DirectionalLight(0xffffff,2.2);k.position.set(3,4,5);scene.add(k);
+const f=new THREE.DirectionalLight(0x999999,1.2);f.position.set(-3,2,-3);scene.add(f);
+const r=new THREE.DirectionalLight(0xaaaaaa,.7);r.position.set(0,-2,-4);scene.add(r);
 
 const sCvs=document.createElement('canvas');
 const sCtx=sCvs.getContext('2d',{willReadFrequently:true});
@@ -607,19 +604,24 @@ const ASCII=' .:;+*%S#@';
 const CW=11,CH=20;
 
 let model=null;
-new GLTFLoader().load('model/scene.gltf',
-  g=>{
-    model=g.scene;
+new FBXLoader().load('model/teddy-bear.fbx',
+  obj=>{
+    model=obj;
     const box=new THREE.Box3().setFromObject(model);
     const c=box.getCenter(new THREE.Vector3());
     const s=box.getSize(new THREE.Vector3());
-    const sc=2.43/Math.max(s.x,s.y,s.z);
+    const sc=1.6/Math.max(s.x,s.y,s.z);
     model.scale.setScalar(sc);
     model.position.sub(c.multiplyScalar(sc));
     model.position.y-=.15;
+    model.rotation.y=(20+180)*Math.PI/180;
+    model.rotation.z=(-30-80)*Math.PI/180;
+    const texLoader=new THREE.TextureLoader();
+    const tex=texLoader.load('model/teddy-bear.jpg');
+    tex.colorSpace=THREE.SRGBColorSpace;
     model.traverse(child=>{
       if(child.isMesh){
-        child.material=new THREE.MeshStandardMaterial({color:0x6080cc,roughness:.75,metalness:.15});
+        child.material=new THREE.MeshStandardMaterial({map:tex,roughness:.85,metalness:0});
       }
     });
     scene.add(model);
@@ -638,7 +640,7 @@ function tick(t){
   requestAnimationFrame(tick);
   if(!model)return;
   const s=t*.001;
-  model.rotation.y=s*.25+mx*.3;
+  model.rotation.y=(20+180)*Math.PI/180+s*.25+mx*.3;
   model.rotation.x=Math.sin(s*.15)*.08+my*.1;
   renderer.render(scene,camera);
 
@@ -664,9 +666,9 @@ function tick(t){
       const br=(rv*.299+gv*.587+bv*.114)/255;
       const ch=ASCII[Math.floor(br*(ASCII.length-1))];
       if(ch===' ')continue;
-      const cr=Math.min(255,rv*.08+200);
-      const cg=Math.min(255,gv*.1+215);
-      const cb=255;
+      const cr=Math.min(255,rv*.15+200);
+      const cg=Math.min(255,gv*.15+200);
+      const cb=Math.min(255,bv*.15+200);
       aCtx.fillStyle=`rgba(${cr|0},${cg|0},${cb|0},${(.5+br*.5).toFixed(2)})`;
       aCtx.fillText(ch,x*CW*dpr,y*CH*dpr);
     }
@@ -694,24 +696,24 @@ document.querySelectorAll('.tab').forEach(tab=>{
   const out=document.getElementById('term-output');
   const cur=document.getElementById('term-cursor');
   const sequences=[
-    {cmd:'$portunus wake',delay:60,pause:400,lines:[
+    {cmd:'$fallin wake',delay:60,pause:400,lines:[
       '[OK] Session started',
       '[OK] Context loaded:',
       '     + 42 decisions',
       '     + 18 lessons',
       '     + 7 active projects',
     ]},
-    {cmd:'$portunus context "auth"',delay:50,pause:400,lines:[
+    {cmd:'$fallin context "auth"',delay:50,pause:400,lines:[
       'Found 6 relevant memories',
       'Graph depth: 3 hops',
       'Profile: planning',
     ]},
-    {cmd:'$portunus checkpoint',delay:50,pause:350,lines:[
+    {cmd:'$fallin checkpoint',delay:50,pause:350,lines:[
       '[OK] Session checkpointed',
       '     working-on: auth rollout',
       '     focus: token refresh',
     ]},
-    {cmd:'$portunus sleep "done"',delay:55,pause:400,lines:[
+    {cmd:'$fallin sleep "done"',delay:55,pause:400,lines:[
       '[OK] Session ended',
       '[OK] Handoff note saved',
       '     next: write tests',
@@ -735,9 +737,7 @@ document.querySelectorAll('.tab').forEach(tab=>{
       await wait(600);
     }
     text+='ready_\n';out.textContent=text;out.scrollTop=out.scrollHeight;
-    await wait(500);
-    await typeCmd('CA : 7q2D3nCqGJXZVLCxZhFz9xtQKCwd1M2APnGeMwZNpump',60);
-    out.scrollTop=out.scrollHeight;cur.style.display='none';
+    cur.style.display='none';
   }
   run();
 })();
