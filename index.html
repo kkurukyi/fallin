@@ -300,8 +300,8 @@ a{color:var(--white);text-decoration:none}
   </main>
 
   <footer class="ftr">
-    <a class="ftr-item" href="#features">Features</a>
-    <a class="ftr-item active" href="#docs">Documentation</a>
+    <a class="ftr-item" href="#features" onclick="event.preventDefault();document.getElementById('features').scrollIntoView({behavior:'smooth'});history.replaceState(null,'',location.pathname)">Features</a>
+    <a class="ftr-item active" href="#docs" onclick="event.preventDefault();document.getElementById('docs').scrollIntoView({behavior:'smooth'});history.replaceState(null,'',location.pathname)">Documentation</a>
     <span class="ftr-item ftr-soon">GitHub<span class="soon-tag">soon</span></span>
     <a class="ftr-item" href="https://x.com/teddyfalli_n" target="_blank" rel="noopener">Twitter</a>
     <a class="ftr-item" href="https://pump.fun/" target="_blank" rel="noopener">$falli'N</a>
